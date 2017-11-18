@@ -10,7 +10,7 @@ fun main(args: Array<String>) {
 }
 // Creates an unambiguous string representation of AST nodes
 class AstPrinter : Expr.Visitor<String> {
-    fun print(expr: Expr) = expr.accept(this)
+    fun print(expr: Expr?) = expr?.accept(this)
 
     override fun visitBinaryExpr(expr: Expr.Binary): String {
         return parenthesize(expr.operator.lexeme, expr.left, expr.right)

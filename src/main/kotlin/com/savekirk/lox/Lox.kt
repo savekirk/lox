@@ -38,19 +38,26 @@ class Lox {
     private fun run(source: String) {
         val scanner = Scanner(source)
         val tokens = scanner.scanTokens()
+        val expression = Parser(tokens).parse()
 
         // Indicate an error in the exit code
         if (hadError) System.exit(65)
 
-        for (token in tokens) {
-            println(token)
-        }
+            println(AstPrinter().print(expression))
     }
 
     companion object {
+        private val lox = Lox()
         fun error(line: Int, message: String) {
-            val lox = Lox()
             lox.report(line, "", message)
+        }
+
+        fun error(token: Token, message: String) {
+            if (token.type == TokenType.EOF) {
+                lox.report(token.line, " at end", message)
+            } else {
+                lox.report(token.line, " at ${token.lexeme}", message)
+            }
         }
     }
 
